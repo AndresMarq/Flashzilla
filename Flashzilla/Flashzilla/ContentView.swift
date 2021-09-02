@@ -19,8 +19,7 @@ struct ContentView: View {
     @State private var isActive = true
     @State private var showingEditScreen = false
     @State private var showTimeOutAlert = false
-    
-    //@ObservedObject var correctAnswer = true
+    @State private var showSettingScreen = false
     
     @State private var engine: CHHapticEngine?
 
@@ -34,12 +33,21 @@ struct ContentView: View {
                     
                 
                 VStack {
-                
-                    Text("Time: \(timeRemaining)")
-                        .font(.largeTitle)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 5)
+                    HStack {
+                        Button(action: {
+                            self.showSettingScreen = true
+                        }, label: {
+                            Image(systemName: "gearshape")
+                                .renderingMode(.original)
+                                .font(.title)
+                        })
+                    
+                        Text("Time: \(timeRemaining)")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 5)
+                    }
                     
                     ZStack {
                         ForEach(0..<cards.count, id: \.self) { index in
@@ -154,6 +162,7 @@ struct ContentView: View {
             .alert(isPresented: $showTimeOutAlert, content: {
                 Alert(title: Text("Your Time is Out"), message: nil, primaryButton: .default(Text("OK")), secondaryButton: .default(Text("Start Over"), action: resetCards))
             })
+            
     }
     
     func removeCard(at index: Int) {

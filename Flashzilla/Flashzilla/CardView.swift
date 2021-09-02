@@ -75,6 +75,7 @@ struct CardView: View {
                             self.feedback.notificationOccurred(.success)
                         } else {
                             self.feedback.notificationOccurred(.error)
+                           
                         }
 
                         self.removal?()
@@ -88,10 +89,6 @@ struct CardView: View {
         .animation(.spring())
     }
 }
-
-//class Answer: ObservableObject {
-//    @Published var correct = true
-//}
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
