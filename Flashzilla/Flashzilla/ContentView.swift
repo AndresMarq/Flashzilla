@@ -20,6 +20,7 @@ struct ContentView: View {
     @State private var showingEditScreen = false
     @State private var showTimeOutAlert = false
     @State private var showSettingScreen = false
+    @State private var recycleWrongAnswers = false
     
     @State private var engine: CHHapticEngine?
 
@@ -51,12 +52,18 @@ struct ContentView: View {
                     
                     ZStack {
                         ForEach(0..<cards.count, id: \.self) { index in
-                            CardView(card: self.cards[index]) {
-                                withAnimation {
-                                    self.removeCard(at: index)
+                            //If recycle card setting selected, wrong answers go back to the stack
+                            let removal = { (rightAnswer: Bool) in
+                                if rightAnswer == false && self.recycleWrongAnswers == true {
+                                    let wrongAnswer = self.cards.remove(at: index)
+                                    self.cards.insert(wrongAnswer, at: 0)
+                                } else {
+                                    withAnimation {
+                                        self.removeCard(at: index)
+                                    }
                                 }
-                                
                             }
+                            CardView(card: self.cards[index], removal: removal)
                                 .stacked(at: index, in: self.cards.count)
                                 .allowsHitTesting(index == self.cards.count - 1)
                                 .accessibility(hidden: index < self.cards.count - 1)
@@ -162,6 +169,14 @@ struct ContentView: View {
             .alert(isPresented: $showTimeOutAlert, content: {
                 Alert(title: Text("Your Time is Out"), message: nil, primaryButton: .default(Text("OK")), secondaryButton: .default(Text("Start Over"), action: resetCards))
             })
+            
+            .actionSheet(isPresented: $showSettingScreen) {
+                ActionSheet(title: Text("Recycle Answers"), message: Text("Sends wrong answers back to the bottom"), buttons: [
+                    .default(Text("On")) { recycleWrongAnswers = true },
+                    .default(Text("Off")) { recycleWrongAnswers = false },
+                    .cancel()
+                ])
+            }
             
     }
     

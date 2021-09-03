@@ -10,7 +10,7 @@ import SwiftUI
 struct CardView: View {
     let card: Card
     
-    var removal: (() -> Void)? = nil
+    var removal: ((Bool) -> Void)? = nil
     
     @State private var isShowingAnswer = false
     @State private var offset = CGSize.zero
@@ -71,14 +71,17 @@ struct CardView: View {
                 }
                 .onEnded { _ in
                     if abs(self.offset.width) > 100 {
+                        var rightAnswer: Bool
+                        
                         if self.offset.width > 0 {
                             self.feedback.notificationOccurred(.success)
+                            rightAnswer = true
                         } else {
                             self.feedback.notificationOccurred(.error)
-                           
+                           rightAnswer = false
                         }
 
-                        self.removal?()
+                        self.removal?(rightAnswer)
                     }
                     self.offset = .zero
                 }
