@@ -56,7 +56,9 @@ struct ContentView: View {
                             let removal = { (rightAnswer: Bool) in
                                 if rightAnswer == false && self.recycleWrongAnswers == true {
                                     let wrongAnswer = self.cards.remove(at: index)
-                                    self.cards.insert(wrongAnswer, at: 0)
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        self.cards.insert(wrongAnswer, at: 0)
+                                    }
                                 } else {
                                     withAnimation {
                                         self.removeCard(at: index)
