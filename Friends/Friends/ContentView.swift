@@ -13,7 +13,7 @@ struct ContentView: View {
     @StateObject var jsonModel = JSONViewModel()
     @Environment(\.managedObjectContext) var moc
     
-    @FetchRequest(entity: UserData.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \UserData.name, ascending: true)], predicate: NSPredicate(format: "name == %@", "\(filter)")) var results: FetchedResults<UserData>
+    @FetchRequest(entity: UserData.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \UserData.name, ascending: true)]) var results: FetchedResults<UserData>
     
     var body: some View {
         NavigationView {
